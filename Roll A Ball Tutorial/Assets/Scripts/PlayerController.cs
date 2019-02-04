@@ -9,17 +9,23 @@ public class PlayerController : MonoBehaviour
     public float speed;
     public Text countText;
     public Text winText;
+    public Text scoreText;
+    public Text loseText;
+
 
     private Rigidbody rb;
     private int count;
+    private int Enemy;
+    private int score;
 
-
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
         count = 0;
-        SetCountText();
+        score = 0;
+        SetAllText(); 
         winText.text = "";
+        loseText.text = "";
     }
 
     void FixedUpdate()
@@ -38,20 +44,34 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+
+
         if (other.gameObject.CompareTag("Pick Up"))
         {
             other.gameObject.SetActive(false);
             count = count + 1;
-            SetCountText();
-
+            score = score + 1; // I added this code to track the score and count separately.
+            SetAllText();
         }
+        else if (other.gameObject.CompareTag("Enemy"))
+        {
+            other.gameObject.SetActive(false);
+            count = count + 1;
+            score = score - 1; // this removes 1 from the score
+            SetAllText();
+        }
+        if (count == 12) 
+{
+    transform.position = new Vector3(30.0f, transform.position.y,3.0f); 
+}
     }
-         void SetCountText ()
+    void SetAllText()
     {
         countText.text = "Count: " + count.ToString();
-        if (count >= 13)
+        if (count >= 12)
         {
-            winText.text = "You Win!";
+            winText.text = "Success!";
         }
+
     }
 }
